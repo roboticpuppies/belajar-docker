@@ -20,6 +20,8 @@ services:
   database:
     # Set image menggunakan mariadb versi 10.5
     image: mariadb:10.5
+    ports:
+      - 127.0.0.1:3306:3306
     # Set environment variable untuk create user dan database.
     environment:
       MARIADB_DATABASE: wpdb
@@ -40,9 +42,8 @@ services:
         hard: -1
     environment:
       - node.name=es01
-      - cluster.name=es-docker
-      - cluster.initial_master_nodes=es01
-      - bootstrap.memory_lock=true
+      - cluster.name=esdocker
+      - discovery.type=single-node
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     # Attach volume untuk data persistence
     volumes:
@@ -59,8 +60,8 @@ services:
     ports:
       - 5601:5601
     environment:
-      ELASTICSEARCH_URL: http://es01:9200
-      ELASTICSEARCH_HOSTS: '["http://es01:9200"]'
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
 
 volumes:
   database:
