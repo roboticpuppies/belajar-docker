@@ -48,7 +48,7 @@ services:
     volumes:
       - data01:/usr/share/elasticsearch/data
     
- q    # Expose port
+    # Expose port
     ports:
       - 9200:9200
 
