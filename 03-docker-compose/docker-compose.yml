@@ -34,6 +34,10 @@ services:
   elasticsearch:
     image: elasticsearch:7.14.2
     container_name: es01
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
     environment:
       - node.name=es01
       - cluster.name=es-docker
@@ -44,7 +48,7 @@ services:
     volumes:
       - data01:/usr/share/elasticsearch/data
     
-    # Expose port
+ q    # Expose port
     ports:
       - 9200:9200
 
