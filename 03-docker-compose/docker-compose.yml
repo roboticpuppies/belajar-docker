@@ -32,8 +32,8 @@ services:
   
   # Buat container elasticsearch
   elasticsearch:
+    # Set image menggunakan ES versi 7.14
     image: elasticsearch:7.14.2
-    container_name: es01
     ulimits:
       memlock:
         soft: -1
@@ -47,10 +47,20 @@ services:
     # Attach volume untuk data persistence
     volumes:
       - data01:/usr/share/elasticsearch/data
-    
     # Expose port
     ports:
       - 9200:9200
+  
+  # Buat container kibana
+  kib01:
+    # Set image
+    image: kibana:7.14.2
+    # Expose port
+    ports:
+      - 5601:5601
+    environment:
+      ELASTICSEARCH_URL: http://es01:9200
+      ELASTICSEARCH_HOSTS: '["http://es01:9200"]'
 
 volumes:
   database:
