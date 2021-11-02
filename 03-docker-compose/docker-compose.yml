@@ -1,0 +1,53 @@
+version: '3.1'
+
+services:
+  # Buat container NGINX
+  nginx:
+    # Set docker image
+    image: nginx
+    # Otomatis restart container jika stop / fail.
+    # Jika container dihentikan manual, maka docker hanya merestart jika docker daemon direstart.
+    # atau jika container direstart manual.
+    restart: always
+    # Expose port
+    ports:
+      - 80:80
+    # Attach volume berisi static html ke dalam container
+    volumes:
+      - ./nginx:/usr/share/nginx/html:ro
+  
+  # Buat container database
+  database:
+    # Set image menggunakan mariadb versi 10.5
+    image: mariadb:10.5
+    # Set environment variable untuk create user dan database.
+    environment:
+      MARIADB_DATABASE: wpdb
+      MARIADB_USER: wp_user
+      MARIADB_PASSWORD: bE9UabWw7rEQJZTq
+      MARIADB_RANDOM_ROOT_PASSWORD: 'yes'
+    # Attach volume untuk data persistence
+    volumes:
+      - database:/var/lib/mysql
+  
+  # Buat container elasticsearch
+  elasticsearch:
+    image: elasticsearch:7.14.2
+    container_name: es01
+    environment:
+      - node.name=es01
+      - cluster.name=es-docker
+      - cluster.initial_master_nodes=es01
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    # Attach volume untuk data persistence
+    volumes:
+      - data01:/usr/share/elasticsearch/data
+    
+    # Expose port
+    ports:
+      - 9200:9200
+
+volumes:
+  database:
+  data01:
