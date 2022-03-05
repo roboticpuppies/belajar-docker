@@ -1,0 +1,18 @@
+# Dockerfile for development purposes only
+# use `npm run start` just for development
+# use `npm run build` for production
+
+FROM node:16-alpine
+
+WORKDIR '/app'
+COPY package.json .
+RUN npm install
+
+COPY . .
+CMD ["npm", "run", "start"]
+
+# This will copy all files here (except node_modules folder)
+# and create new docker image based on node:16-alpine image
+
+# To dynamically change the script, you can use volume
+# docker run -v /app/node_modules -v $(pwd):/app -p 3000:3000 <image_id>
